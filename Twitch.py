@@ -1,5 +1,7 @@
+# Imports
 from dotenv import load_dotenv
 import logging
+from typing import List
 import os
 import requests
 
@@ -15,7 +17,7 @@ urls = {
 }
 
 
-def get_access_token():
+def get_access_token() -> None:
     client_id = os.getenv("CLIENTID")
     data = {
         "client_id": client_id,
@@ -40,6 +42,28 @@ def get_access_token():
         else:
             logging.critical("Exception when authorizing. No message returned.")
 
+        exit(-1)
 
-logging.info("Started scrapping")
-get_access_token()
+
+def get_top_streamers(amount: int, language: str) -> List:
+    # TODO: Query multiple languages and concatenate the results
+    params = {
+        "first": amount,
+        "language": "es"
+    }
+
+    r = session.get(urls["streams"], params=params)
+    response = r.json()
+
+    try:
+        data = response["data"]
+        return data
+    except KeyError:
+        status = response.get("status")
+
+        if status is not None:
+            logging.critical("Getting top streamers failed with status code %d" % status)
+        else:
+            logging.critical("Getting top streamers failed with no status code")
+
+        exit(-1)
