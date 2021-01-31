@@ -1,5 +1,4 @@
 import psycopg2
-import pytz
 from datetime import datetime
 
 __connector = None
