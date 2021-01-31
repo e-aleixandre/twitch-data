@@ -1,14 +1,17 @@
 # Imports
 import logging
-from typing import List
+from typing import List, Set
 import os
 import requests
 import threading
+import Streamer
 
 
 class Twitch:
     def __init__(self):
-        # Holding every needed url so its easy to maintain
+        # List of streamers
+        self.__streamers: Set[Streamer] = set()
+        # Holding every needed url so its easier to maintain
         self.__urls = {
             "auth": "https://id.twitch.tv/oauth2/token",
             "streams": "https://api.twitch.tv/helix/streams",
@@ -16,10 +19,6 @@ class Twitch:
         }
         # Managing everything through a session seems better
         self.__session = requests.Session()
-        # { Streamers -> viewers } dictionary
-        self.__dict = {}
-        # Lock to avoid dictionary corruption in multithreading
-        self.__lock = threading.Lock()
 
     def get_access_token(self, client_id: str, secret: str) -> None:
         data = {
@@ -41,7 +40,7 @@ class Twitch:
         except KeyError:
             message = response.get("message")
             if message is not None:
-                logging.critical("Exception when authorizing: %s" % response.get("message"))
+                logging.critical("Exception when authorizing: %s", response.get("message"))
             else:
                 logging.critical("Exception when authorizing. No message returned.")
 
@@ -64,7 +63,7 @@ class Twitch:
             status = response.get("status")
 
             if status is not None:
-                logging.critical("Getting top streamers failed with status code %d" % status)
+                logging.critical("Getting top streamers failed with status code %d", status)
             else:
                 logging.critical("Getting top streamers failed with no status code")
 
@@ -80,8 +79,8 @@ class Twitch:
         except KeyError:
             status = response.get("status")
             if status is not None:
-                logging.error("Error getting chatters of %s with a status code of %d" % (streamer, status))
+                logging.error("Error getting chatters of %s with a status code of %d", streamer, status)
             else:
-                logging.error("Error getting chatters of %s with no status code" % streamer)
+                logging.error("Error getting chatters of %s with no status code", streamer)
 
         return []

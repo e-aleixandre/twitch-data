@@ -1,5 +1,5 @@
 # IMPORTS
-import Twitch
+from classes import Twitch
 import logging
 import dotenv
 import os
@@ -19,13 +19,6 @@ twitch.get_access_token(os.getenv("CLIENTID"), os.getenv("SECRET"))
 logging.info("Fetching spanish top 2")
 streams = twitch.get_top_streamers(2, "es")
 
-"""
-for stream in streams:
-    username = stream["user_login"]
-    logging.info("Getting chatters for %s" % username)
-    chatters = Twitch.get_current_chatters(username)
-    print(chatters)
-"""
-
 logging.info("Getting chatters for kuku0678")
 chatters = twitch.get_current_chatters("kuku0678")
+
