@@ -17,7 +17,7 @@ def _handle_streamer(streamer: str) -> None:
         chatters = twitch.get_current_chatters(streamer)
         with data_lock:
             data[streamer] = chatters
-    print("Semaphore released for: ", threading.current_thread().getName())
+
     semaphore.release()
 
 
@@ -47,7 +47,6 @@ streamers = Model.get_streamers()
 for streamer in streamers:
     semaphore.acquire()
     t = threading.Thread(target=_handle_streamer, args=(streamer,))
-    print("Semaphore acquired for: ", t.getName())
     t.start()
     threads.append(t)
 
