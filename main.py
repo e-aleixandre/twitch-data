@@ -6,6 +6,7 @@ import dotenv
 from datetime import datetime
 import os
 import sys
+import pickle
 
 
 # Utility functions
@@ -56,13 +57,20 @@ _join_threads()
 logging.info("Finished scrapping")
 logging.info("Storing to the DB")
 if data:
+    scrap = dict()
+    scrap["streamers"] = data
+    created_at = datetime.utcnow()
+    scrap["created_at"] = created_at
     try:
-        scrap = dict()
-        scrap["streamers"] = data
-        scrap["created_at"] = datetime.utcnow()
         Model.new_scrap(scrap)
     except:
         logging.error("Data couldn't be saved in the DB, it should be stored in a backup file")
+        backup_file = "%s/%s.dump" % (os.getenv("BACKUP"), created_at)
+        backup_file = backup_file.replace(":", "-")
+        with open(backup_file, 'wb') as bf:
+            pickle.dump(scrap, bf, pickle.HIGHEST_PROTOCOL)
+        logging.info("Data stored in file: %s.dump" % created_at)
+        # TODO: What if an exception raises during file writing?
     else:
         logging.info("Data stored correctly")
 else:
