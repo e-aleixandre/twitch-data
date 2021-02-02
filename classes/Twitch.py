@@ -4,13 +4,13 @@ from typing import List, Set
 import os
 import requests
 import threading
-import Streamer
+# import Streamer
 
 
 class Twitch:
     def __init__(self):
         # List of streamers
-        self.__streamers: Set[Streamer] = set()
+        # self.__streamers: Set[Streamer] = set()
         # Holding every needed url so its easier to maintain
         self.__urls = {
             "auth": "https://id.twitch.tv/oauth2/token",
@@ -84,3 +84,13 @@ class Twitch:
                 logging.error("Error getting chatters of %s with no status code", streamer)
 
         return []
+
+    def is_live(self, streamer: str) -> bool:
+        print(streamer)
+        params = {
+            "user_login": streamer
+        }
+        r = self.__session.get(self.__urls["streams"], params=params)
+        response = r.json()
+
+        return len(response["data"]) != 0
