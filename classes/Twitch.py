@@ -17,8 +17,8 @@ class Twitch:
             "streams": "https://api.twitch.tv/helix/streams",
             "chatters": "https://tmi.twitch.tv/group/user/%s/chatters"
         }
-        # Managing everything through a session seems better
-        self.__session = requests.Session()
+        # Auth headers: I no longer use a session as they aren't thread safe
+        self.__headers = None
 
     def get_access_token(self, client_id: str, secret: str) -> None:
         data = {
@@ -27,16 +27,16 @@ class Twitch:
             "grant_type": "client_credentials"
         }
 
-        r = self.__session.post(self.__urls["auth"], data=data)
+        r = requests.post(self.__urls["auth"], data=data)
         response = r.json()
 
         try:
             token = response["access_token"]
-            self.__session.headers.update({
+            self.__headers = {
                 "client-id": client_id,
                 "Authorization": ("Bearer %s" % token)
-            })
-            logging.info("Authorized correctly")
+            }
+            logging.debug("Authorized correctly")
         except KeyError:
             message = response.get("message")
             if message is not None:
@@ -53,7 +53,7 @@ class Twitch:
             "language": "es"
         }
 
-        r = self.__session.get(self.__urls["streams"], params=params)
+        r = requests.get(self.__urls["streams"], params=params, headers=self.__headers)
         response = r.json()
 
         try:
@@ -90,7 +90,7 @@ class Twitch:
         params = {
             "user_login": streamer
         }
-        r = self.__session.get(self.__urls["streams"], params=params)
+        r = requests.get(self.__urls["streams"], params=params, headers=self.__headers)
         response = r.json()
 
         return len(response["data"]) != 0

@@ -28,11 +28,12 @@ def new_scrap(scrap: dict):
     return scrap_id
 
 
-def get_streamers():
-    streamers_collection= __db.streamers
+def get_streamers(limit: int = 0):
+    streamers_collection = __db.streamers
 
     streamers = []
-    for streamer in streamers_collection.find():
+
+    for streamer in streamers_collection.find().limit(limit):  # A limit of 0 is equivalent to no limit
         streamers.append(streamer["user_login"])
 
     return streamers
