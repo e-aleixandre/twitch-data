@@ -86,7 +86,6 @@ class Twitch:
         return []
 
     def is_live(self, streamer: str) -> bool:
-        print(streamer)
         params = {
             "user_login": streamer
         }

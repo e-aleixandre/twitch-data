@@ -26,6 +26,9 @@ def _join_threads() -> None:
         thread.join()
 
 
+# Setting CWD because cronjob uses home by default
+os.chdir(os.path.dirname(__file__))
+
 # LOADING ENV VARIABLES
 dotenv.load_dotenv(".env.local")
 
@@ -68,7 +71,7 @@ if data:
         backup_file = backup_file.replace(":", "-")
         with open(backup_file, 'wb') as bf:
             pickle.dump(scrap, bf, pickle.HIGHEST_PROTOCOL)
-        logging.info("Data stored in file: %s.dump" % created_at)
+        logging.info("Data stored in file: %s.dump" % backup_file)
         # TODO: What if an exception raises during file writing?
     else:
         logging.info("Data stored correctly")
