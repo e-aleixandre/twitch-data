@@ -5,7 +5,6 @@ import logging
 import dotenv
 from datetime import datetime
 import os
-import sys
 import pickle
 
 
@@ -35,7 +34,14 @@ dotenv.load_dotenv(".env.local")
 # INITIALIZING
 logging.basicConfig(filename="twitch-data.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 twitch = Twitch.Twitch()
-Model.initialize(os.getenv("DBCON"))
+
+try:
+    Model.initialize(os.getenv("DBCON"))
+except Exception as e:
+    logging.critical("An error occured connecting to the database. Logging the exception.")
+    logging.exception(e)
+    exit(-1)
+
 data_lock = threading.Lock()
 data = {}
 threads = []
@@ -65,14 +71,15 @@ if data:
     scrap["created_at"] = created_at
     try:
         Model.new_scrap(scrap)
-    except:
-        logging.error("Data couldn't be saved in the DB, it should be stored in a backup file")
+    except Exception as e:
+        logging.error("Data couldn't be saved in the DB. Logging exception.")
+        logging.exception(e)
         backup_file = "%s/%s.dump" % (os.getenv("BACKUP"), created_at)
         backup_file = backup_file.replace(":", "-")
         with open(backup_file, 'wb') as bf:
             pickle.dump(scrap, bf, pickle.HIGHEST_PROTOCOL)
         logging.info("Data stored in file: %s.dump" % backup_file)
-        # TODO: What if an exception raises during file writing?
+        # TODO: What if an exception raises during file writing? Sheeeeeeeeeeeeeeeeeeeeet
     else:
         logging.info("Data stored correctly")
 else:

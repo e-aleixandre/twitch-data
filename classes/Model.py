@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-
 from datetime import datetime
 
 __client = None
@@ -11,11 +10,9 @@ def initialize(constring: str):
     global __db
 
     __client = MongoClient(constring)
-    try:
-        __client.server_info()
-        __db = __client.communityscrapper
-    except:
-        raise RuntimeError
+
+    __client.server_info()
+    __db = __client.communityscrapper
 
 
 def __check() -> bool:
@@ -26,6 +23,23 @@ def new_scrap(scrap: dict):
     scraps_collection = __db.scraps
     scrap_id = scraps_collection.insert_one(scrap).inserted_id
     return scrap_id
+
+
+def get_scraps(min_date: datetime, max_date: datetime):
+    scraps_collection = __db.scraps
+    params = {
+        "created_at": {
+            "$gte": min_date,
+            "$lte": max_date
+        }
+    }
+
+    scraps = []
+
+    for scrap in scraps_collection.find(params):
+        scraps.append(scrap)
+
+    return scraps
 
 
 def get_streamers(limit: int = 0):

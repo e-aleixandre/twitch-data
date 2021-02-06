@@ -425,3 +425,5 @@ dmypy.json
 cython_debug/
 time_experiment.py
 ModelTester.py
+
+node_modules/
