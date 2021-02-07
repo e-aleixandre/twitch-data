@@ -13,6 +13,17 @@ module.exports.routes = {
   //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
   //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
   //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  'GET /':                   { action: 'view-dashboard-or-redirect' },
+  'GET /login':              { action: 'entrance/view-login' },
+  'GET /account':            { action: 'account/view-account-overview' },
+  'GET /password/forgot':    { action: 'entrance/view-forgot-password' },
+  'GET /password/new':       { action: 'entrance/view-new-password' },
+  'GET /account/password':   { action: 'account/view-edit-password' },
+  'GET /account/profile':    { action: 'account/view-edit-profile' },
+  'GET /dashboard':           { action: 'dashboard/view-dashboard'},
+  'GET /dashboard/create-report': {action: 'dashboard/view-create-report'},
+
+  /*
   'GET /':                   { action: 'view-homepage-or-redirect' },
   'GET /welcome/:unused?':   { action: 'dashboard/view-welcome' },
 
@@ -26,20 +37,18 @@ module.exports.routes = {
   'GET /email/confirmed':    { action: 'entrance/view-confirmed-email' },
 
   'GET /login':              { action: 'entrance/view-login' },
-  'GET /password/forgot':    { action: 'entrance/view-forgot-password' },
-  'GET /password/new':       { action: 'entrance/view-new-password' },
 
-  'GET /account':            { action: 'account/view-account-overview' },
-  'GET /account/password':   { action: 'account/view-edit-password' },
-  'GET /account/profile':    { action: 'account/view-edit-profile' },
+
+
+
 
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝  └┘   ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝
   '/terms':                   '/legal/terms',
+  */
   '/logout':                  '/api/v1/account/logout',
-
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
@@ -57,6 +66,7 @@ module.exports.routes = {
   'PUT   /api/v1/account/update-profile':             { action: 'account/update-profile' },
   'PUT   /api/v1/account/update-billing-card':        { action: 'account/update-billing-card' },
   'PUT   /api/v1/entrance/login':                        { action: 'entrance/login' },
+  'POST /api/v1/entrance/create-report':                {action: 'dashboard/create-report'},
   'POST  /api/v1/entrance/signup':                       { action: 'entrance/signup' },
   'POST  /api/v1/entrance/send-password-recovery-email': { action: 'entrance/send-password-recovery-email' },
   'POST  /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
