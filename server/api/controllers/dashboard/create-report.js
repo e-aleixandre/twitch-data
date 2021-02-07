@@ -34,9 +34,10 @@ module.exports = {
     //  I could check here if this dates already produced a report
   },
 
-  fn: async function ({minDate, maxDate}) {
+  fn: async function (_, exits) {
     // Here I can process the form when it's submitted
-    console.log(minDate, maxDate);
+
+    return views()
 
   }
 }
