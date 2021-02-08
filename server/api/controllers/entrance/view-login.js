@@ -6,7 +6,6 @@ module.exports = {
 
   description: 'Display "Login" page.',
 
-
   exits: {
 
     success: {
