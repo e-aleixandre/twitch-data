@@ -32,7 +32,7 @@ os.chdir(os.path.dirname(__file__))
 dotenv.load_dotenv(".env.local")
 
 # INITIALIZING
-logging.basicConfig(filename="twitch-data.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(filename=os.getenv("LOGS") + "/twitch-data.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 twitch = Twitch.Twitch()
 
 try:
