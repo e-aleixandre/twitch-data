@@ -56,7 +56,8 @@ class DataProcessor:
         sheet_one = self.__get_streamers_viewers_dataframe__()
         sheet_two = self.__get_common_viewers_dataframe__()
 
-        writer = pandas.ExcelWriter(filename, engine="xlsxwriter")
+        writer = pandas.ExcelWriter(self.__exports + '/' + filename, engine="xlsxwriter")
+        # TODO: Write min_date - max_date on cell A1
         sheet_one.to_excel(writer, sheet_name="Viewers per Streamer")
         sheet_two.to_excel(writer, sheet_name="Common viewers")
 
@@ -77,7 +78,7 @@ class DataProcessor:
         hashed_name.update(max_date.encode('utf-8'))
         hashed_name = hashed_name.hexdigest()
 
-        return self.__exports + "/" + hashed_name + '.xlsx'
+        return hashed_name + '.xlsx'
 
     def __get_streamers_viewers_dataframe__(self):
         data = []

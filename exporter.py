@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import logging
 import sys
+import json
 
 # Setting CWD because cronjob uses home by default
 os.chdir(os.path.dirname(__file__))
@@ -26,6 +27,12 @@ try:
 except Exception as e:
     logging.critical("An error occurred connecting to the database. Logging the exception.")
     logging.exception(e)
+    results = {
+        "ok": False,
+        "code": 1
+    }
+
+    sys.stdout.write(json.dumps(results))
     exit(-1)
 
 try:
@@ -33,11 +40,25 @@ try:
 except Exception as e:
     logging.critical("An error occurred while fetching the database. Logging the exception.")
     logging.exception(e)
+
+    results = {
+        "ok": False,
+        "code": 2
+    }
+
+    sys.stdout.write(json.dumps(results))
     exit(-1)
 
 if not scraps_list:
     logging.warning("No data. This could be caused by an undetected error.")
     logging.warning("Min date: %s\tMax date: %s" % (min_date, max_date))
+
+    results = {
+        "ok": False,
+        "code": 10
+    }
+
+    sys.stdout.write(json.dumps(results))
     exit(0)
 
 try:
@@ -46,12 +67,29 @@ try:
 except Exception as e:
     logging.critical("An error raised while processing the data. Logging the exception.")
     logging.exception(e)
+    results = {
+        "ok": False,
+        "code": 3
+    }
+
+    sys.stdout.write(json.dumps(results))
     exit(-1)
 
 try:
     logging.info("Exporting the data.")
     response = processor.export()
-    sys.stdout.write(response)
+    results = {
+        "ok": True,
+        "fileName": response
+    }
+
+    sys.stdout.write(json.dumps(results))
 except Exception as e:
     logging.error("Error while exporting the data. Logging the exception.")
     logging.exception(e)
+    results = {
+        "ok": False,
+        "code": 20
+    }
+
+    sys.stdout.write(json.dumps(results))
