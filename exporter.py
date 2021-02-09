@@ -21,8 +21,19 @@ logging.basicConfig(filename=os.getenv("LOGS") + "/exporter.log",
 
 logging.info("Exporter started.")
 
-min_date = datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M")
-max_date = datetime.strptime(sys.argv[2], "%Y-%m-%dT%H:%M")
+try:
+    min_date = datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M")
+    max_date = datetime.strptime(sys.argv[2], "%Y-%m-%dT%H:%M")
+except Exception as e:
+    logging.critical("An error occured while parsing the dates. Loggin the exception.")
+    logging.exception(e)
+    results = {
+        "ok": False,
+        "code": 1
+    }
+
+    sys.stdout.write(json.dumps(results))
+    exit(-1)
 
 try:
     Model.initialize(os.getenv("DBCON"))
@@ -31,7 +42,7 @@ except Exception as e:
     logging.exception(e)
     results = {
         "ok": False,
-        "code": 1
+        "code": 2
     }
 
     sys.stdout.write(json.dumps(results))
@@ -45,7 +56,7 @@ except Exception as e:
 
     results = {
         "ok": False,
-        "code": 2
+        "code": 3
     }
 
     sys.stdout.write(json.dumps(results))
