@@ -7,7 +7,9 @@ import sys
 import json
 
 # Setting CWD because cronjob uses home by default
-os.chdir(os.path.dirname(__file__))
+cwd = os.path.dirname(__file__)
+if cwd != '':
+    os.chdir(cwd)
 
 # LOADING ENV VARIABLES
 dotenv.load_dotenv(".env.local")

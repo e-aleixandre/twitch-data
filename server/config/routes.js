@@ -22,8 +22,8 @@ module.exports.routes = {
   'GET /account/profile':    { action: 'account/view-edit-profile' },
   'GET /dashboard':           { action: 'dashboard/view-dashboard'},
   'GET /reports/create':      { action: 'reports/view-create-report'},
-
-  /*
+   /*
+  
   'GET /':                   { action: 'view-homepage-or-redirect' },
   'GET /welcome/:unused?':   { action: 'dashboard/view-welcome' },
 
@@ -46,8 +46,8 @@ module.exports.routes = {
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝  └┘   ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝
-  '/terms':                   '/legal/terms',
-  */
+  '/terms':                   '/legal/terms',*/
+  
   '/logout':                  '/api/v1/account/logout',
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
