@@ -26,7 +26,7 @@ module.exports = {
   fn: async function ({minDate, maxDate}, exits) {
 
     var execSync = require('child_process').execSync, output;
-    var program = 'python ../exporter.py ' + minDate + ' ' + maxDate;
+    var program = 'python3 ../exporter.py ' + minDate + ' ' + maxDate;
     output = execSync(program, { encoding: 'utf-8' });
 
     var json = JSON.parse(output);
