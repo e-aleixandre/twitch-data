@@ -51,7 +51,7 @@ module.exports.datastores = {
     // adapter: 'sails-mysql',
     // url: 'mysql://user:password@host:port/database',
     adapter: 'sails-postgresql',
-    url: 'postgresql://user:password@host/database'
+    url: 'postgresql://csfrontend:Ad4%26XO91%5E%5EsV5Dq3Ik@35.180.27.94/csfrontend'
   },
 
 

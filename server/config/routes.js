@@ -23,7 +23,7 @@ module.exports.routes = {
   'GET /dashboard':           { action: 'dashboard/view-dashboard'},
   'GET /reports/create':      { action: 'reports/view-create-report'},
    /*
-  
+
   'GET /':                   { action: 'view-homepage-or-redirect' },
   'GET /welcome/:unused?':   { action: 'dashboard/view-welcome' },
 
@@ -31,13 +31,9 @@ module.exports.routes = {
   'GET /legal/terms':        { action:   'legal/view-terms' },
   'GET /legal/privacy':      { action:   'legal/view-privacy' },
   'GET /contact':            { action:   'view-contact' },
-
   'GET /signup':             { action: 'entrance/view-signup' },
   'GET /email/confirm':      { action: 'entrance/confirm-email' },
   'GET /email/confirmed':    { action: 'entrance/view-confirmed-email' },
-
-  'GET /login':              { action: 'entrance/view-login' },
-
 
 
 
@@ -47,7 +43,7 @@ module.exports.routes = {
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
   //  ╩ ╩╩╚═╝╚═╝  ╩╚═╚═╝═╩╝╩╩╚═╚═╝╚═╝ ╩ ╚═╝  └┘   ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝
   '/terms':                   '/legal/terms',*/
-  
+
   '/logout':                  '/api/v1/account/logout',
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

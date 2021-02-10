@@ -5,7 +5,7 @@
  */
 
 module.exports = {
-
+  tableName: 'users', // needed because postgres table 'user' is reserved
   attributes: {
 
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
