@@ -24,7 +24,7 @@ module.exports = {
   },
 
   fn: async function ({minDate, maxDate}, exits) {
-
+    // TODO: This is 100% exploitable --> sanitize dates
     var execSync = require('child_process').execSync, output;
     var program = 'python3 ../exporter.py ' + minDate + ' ' + maxDate;
     output = execSync(program, { encoding: 'utf-8' });
