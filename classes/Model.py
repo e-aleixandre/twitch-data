@@ -78,11 +78,23 @@ def get_scraps(min_date: datetime, max_date: datetime):
     else:
         min_date = min_date.strftime("%Y-%m-%dT%H:%M")
         max_date = max_date.strftime("%Y-%m-%dT%H:%M")
+
         table = __db.Table('scraps')
-        response = table.query(
-            KeyConditionExpression=Key('created_at').gte(min_date) & Key('created_at').lte(max_date)
-        )
-        response = response['Items']
+        args = {
+            "KeyConditionExpression": Key('created_at').gte(min_date) & Key('created_at').lte(max_date)
+        }
+        done = False
+        start_key = None
+        response = []
+        while not done:
+            if start_key:
+                args["ExclusiveStartKey"] = start_key
+
+            query_result = table.query(**args)
+            response.extend(query_result["Items"])
+
+            start_key = query_result.get("LastEvaluatedKey", None)
+            done = start_key is None
 
     scraps = []
 
