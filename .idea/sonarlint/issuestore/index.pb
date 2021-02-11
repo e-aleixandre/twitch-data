@@ -201,5 +201,7 @@ J
 server/config/bootstrap.js,b\2\b203e09457e99fdc6f1fce8f97d29e117bb2fef3
 C
 server/package.json,5\4\54e8f14248f674b305c14bde70fadbe1da1edb31
-;
-migrator.py,b\7\b7edcc3e3b6b934e442b2182d4424b84b7734ec4
+@
+test/migrator.py,f\d\fd4a162aa8afab17f5cf0c32f5301235e3b964fd
+<
+test/test.js,2\2\22c3735a1e470be5775fee517ec3d5ca58a7b7ee
