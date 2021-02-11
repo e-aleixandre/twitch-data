@@ -12,7 +12,7 @@ def initialize(constring: str):
     __client = MongoClient(constring)
 
     __client.server_info()
-    __db = __client.communityscrapper
+    __db = __client.communityscraper
 
 
 def __check() -> bool:
