@@ -77,6 +77,7 @@ if not scraps_list:
 try:
     logging.info("Processing the data.")
     processor = DataProcessor.DataProcessor(scraps_list, min_date, max_date, os.getenv("EXPORTS"))
+    Model.close()
 except Exception as e:
     logging.critical("An error raised while processing the data. Logging the exception.")
     logging.exception(e)

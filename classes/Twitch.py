@@ -4,7 +4,6 @@ from typing import List, Set
 import os
 import requests
 import threading
-# import Streamer
 
 
 class Twitch:
