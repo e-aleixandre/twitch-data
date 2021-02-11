@@ -38,6 +38,10 @@ def __generate_dynamo_id() -> str:
     if __mongo:
         raise RuntimeError("Attempted to execute a dynamodb related function when dbms is not dynamodb")
 
+    """
+        Dynamo IDs dont work like I thought. For now, let's just use a constant
+    """
+    return "SCRAP"
     table = __client.Table('scraps')
     while True:
         id = uuid.uuid4().hex
@@ -79,9 +83,10 @@ def get_scraps(min_date: datetime, max_date: datetime):
         min_date = min_date.strftime("%Y-%m-%dT%H:%M")
         max_date = max_date.strftime("%Y-%m-%dT%H:%M")
 
-        table = __db.Table('scraps')
+        table = __client.Table('scraps')
         args = {
-            "KeyConditionExpression": Key('created_at').gte(min_date) & Key('created_at').lte(max_date)
+            "IndexName": "created_at-index",
+            "KeyConditionExpression": Key('_id').eq('SCRAPS') & Key('created_at').between(min_date, max_date)
         }
         done = False
         start_key = None
@@ -112,9 +117,11 @@ def get_streamers(limit: int = 0):
         table = __client.Table('streamers')
 
         response = []
-        args = {
-            "Limit": limit
-        }
+        args = dict()
+
+        if limit != 0:
+            args["Limit"] = limit
+
         done = False
         start_key = None
         while not done:
