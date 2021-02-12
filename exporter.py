@@ -2,6 +2,7 @@ from classes import Model, DataProcessor
 import dotenv
 import os
 from datetime import datetime
+from memory_profiler import memory_usage
 import logging
 import sys
 import json
@@ -50,6 +51,7 @@ except Exception as e:
 
 try:
     scraps_list = Model.get_scraps(min_date, max_date)
+    logging.info("Memory usage after get_scraps: %s" % memory_usage())
 except Exception as e:
     logging.critical("An error occurred while fetching the database. Logging the exception.")
     logging.exception(e)
@@ -77,6 +79,7 @@ if not scraps_list:
 try:
     logging.info("Processing the data.")
     processor = DataProcessor.DataProcessor(scraps_list, min_date, max_date, os.getenv("EXPORTS"))
+    logging.info("Memory usage after instantiating the DataProcessor: %s" % memory_usage())
 except Exception as e:
     logging.critical("An error raised while processing the data. Logging the exception.")
     logging.exception(e)

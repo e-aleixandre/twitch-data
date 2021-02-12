@@ -75,7 +75,6 @@ if data:
     logging.info("Memory usage: %s" % memory_usage())
     try:
         Model.new_scrap(scrap)
-        pass
     except Exception as e:
         logging.error("Data couldn't be saved in the DB. Logging exception.")
         logging.exception(e)
