@@ -4,6 +4,7 @@ import threading
 import logging
 import dotenv
 from datetime import datetime
+from memory_profiler import memory_usage
 import os
 import pickle
 
@@ -71,8 +72,10 @@ if data:
     scrap["streamers"] = data
     created_at = datetime.utcnow()
     scrap["created_at"] = created_at
+    logging.info("Memory usage: %s" % memory_usage())
     try:
         Model.new_scrap(scrap)
+        pass
     except Exception as e:
         logging.error("Data couldn't be saved in the DB. Logging exception.")
         logging.exception(e)

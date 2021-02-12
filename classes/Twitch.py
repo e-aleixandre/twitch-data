@@ -1,10 +1,7 @@
 # Imports
 import logging
-from typing import List, Set
-import os
+from typing import List
 import requests
-import threading
-# import Streamer
 
 
 class Twitch:
@@ -70,7 +67,8 @@ class Twitch:
             exit(-1)
 
     def get_current_chatters(self, streamer: str) -> List:
-        r = requests.get(self.__urls["chatters"] % streamer)
+        # Twitch responded with code 400 when using uppercase letters, that's why I use lower() on the streamer
+        r = requests.get(self.__urls["chatters"] % streamer.lower())
         response = r.json()
         try:
             chatters = response["chatters"]
