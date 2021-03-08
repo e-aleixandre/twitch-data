@@ -22,6 +22,7 @@ module.exports.routes = {
   'GET /account/profile':    { action: 'account/view-edit-profile' },
   'GET /dashboard':           { action: 'dashboard/view-dashboard'},
   'GET /reports/create':      { action: 'reports/view-create-report'},
+  'GET /reports':             { action: 'reports/view-reports'},
    /*
 
   'GET /':                   { action: 'view-homepage-or-redirect' },

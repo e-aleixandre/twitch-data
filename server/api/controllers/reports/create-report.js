@@ -24,14 +24,30 @@ module.exports = {
   },
 
   fn: async function ({ minDate, maxDate }, exits) {
+    const report = {
+      minDate,
+      maxDate,
+      progress: 0,
+      user: this.req.session.userId
+    }
     // TODO: This is 100% exploitable --> sanitize dates
-    var execSync = require('child_process').execSync,
-        output;
-    var program = 'python3 ../exporter.py ' + minDate + ' ' + maxDate;
-    output = execSync(program, { encoding: 'utf-8' });
+    const { spawn } = require('child_process');
+    const { openSync } = require('fs');
+    const out = openSync('../out.log', 'a');
+    const err = openSync('../out.log', 'a');
+    //const program = 'python3 ../exporter.py ' + minDate + ' ' + maxDate;
+    const program = spawn('python3', ['../exporter.py', minDate, maxDate], {
+      detached: true,
+      stdio: ['ignore', out, err]
+    });
 
-    var json = JSON.parse(output);
-    return exits.success(json);
+    program.unref();
+
+    report.pid = program.pid;
+
+    const newReport = await Report.create(report);
+
+    return exits.success(newReport);
 
   }
 

@@ -1,0 +1,62 @@
+<div id="reports" v-cloak>
+    <account-notification-banner></account-notification-banner>
+    <div class="container-fluid pt-5 pb-5">
+    <h1 class="text-center">Listado de informes</h1>
+    <div style="max-width:  650px;" class="mx-auto" v-if="reports.length > 0">
+      <hr/>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Desde
+                </th>
+                <th>
+                    Hasta
+                </th>
+                <th>
+                    Progreso
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+            <tr v-for="report in reports">
+                <td>
+                    {{ report.id }}
+                </td>
+                <td>
+                    {{ report.minDate }}
+                </td>
+                <td>
+                    {{ report.maxDate }}
+                </td>
+                <td>
+                    <div style="position: relative; text-align: center" class="progress">
+                        <div style="position: absolute; right: 0; left: 0;">{{ report.progress }}%</div>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="report.progress" aria-valuemin="0" aria-valuemax="100" :style="{ width: report.progress + '%' }"></div>
+                    </div>
+                </td>
+                <td v-if="report.completed">
+                    <a :href="report.filePath"><i class="fas fa-file-download"></i></a>
+                    <a :href="report.filePath"><i class="fas fa-trash-alt"></i></a>
+                </td>
+                <td v-else>
+                    <a :href="report.filePath"><i class="fas fa-stop-circle"></i></a>
+                    <a :href="report.filePath"><i class="fas fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            </thead>
+        </table>
+    </div>
+    <div style="max-width:  650px;" class="mx-auto" v-else>
+        No hay informes
+        <hr/>
+    </div>
+
+  </div>
+</div>
+
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

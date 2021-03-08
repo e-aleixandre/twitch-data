@@ -17,7 +17,7 @@ module.exports = {
   },
 
 
-  fn: async function (exits) {
+  fn: async function () {
 
     // Respond with view.
     return {
