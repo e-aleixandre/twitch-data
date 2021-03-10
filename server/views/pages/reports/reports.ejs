@@ -23,7 +23,7 @@
                     Acciones
                 </th>
             </tr>
-            <tr v-for="report in reports">
+            <tr v-for="report in reports" :key="report.id">
                 <td>
                     {{ report.id }}
                 </td>
@@ -39,13 +39,12 @@
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="report.progress" aria-valuemin="0" aria-valuemax="100" :style="{ width: report.progress + '%' }"></div>
                     </div>
                 </td>
-                <td v-if="report.completed">
+                <td class="d-flex justify-content-around" v-if="report.completed">
                     <a :href="report.filePath"><i class="fas fa-file-download"></i></a>
                     <a :href="report.filePath"><i class="fas fa-trash-alt"></i></a>
                 </td>
-                <td v-else>
-                    <a :href="report.filePath"><i class="fas fa-stop-circle"></i></a>
-                    <a :href="report.filePath"><i class="fas fa-trash-alt"></i></a>
+                <td class="d-flex justify-content-around" v-else>
+                    <i @click="stopReport(report.id)" class="fas fa-stop-circle link fa-lg"></i>
                 </td>
             </tr>
             </thead>

@@ -27,6 +27,11 @@ parasails.registerPage('reports', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    //…
+    stopReport: function(key) {
+      console.log(key)
+    },
+    downloadReport: function(event) {
+
+    }
   }
 });
