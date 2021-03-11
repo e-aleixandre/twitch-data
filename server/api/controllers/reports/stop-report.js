@@ -27,7 +27,9 @@ module.exports = {
 
     try {
       let report = await Report.destroyOne({id})
-      process.kill(report.pid)
+
+      if (report.pid !== 0)
+        process.kill(report.pid)
 
       return exits.success({
         ok: true,
