@@ -25,6 +25,8 @@ parasails.registerPage('create-report', {
     // Server error state
     cloudError: '',
 
+    errorMessage: '',
+
     // Cloud success
     cloudSuccess: false,
   },
@@ -43,19 +45,12 @@ parasails.registerPage('create-report', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
     submittedForm: async function(data) {
       if (data.ok) {
-        this.fileName = "/reports/" + data.fileName;
         this.cloudSuccess = true;
       } else {
-        this.cloudError = true;
-        this.code = data.code;
+        this.errorMessage = data.message
       }
-    },
-    clickedDownload: async function() {
-
     }
-
   }
 });

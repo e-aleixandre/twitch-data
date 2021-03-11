@@ -17,12 +17,14 @@
                     Hasta
                 </th>
                 <th>
-                    Progreso
+                    Estado
                 </th>
                 <th>
                     Acciones
                 </th>
             </tr>
+            </thead>
+            <tbody>
             <tr v-for="report in reports" :key="report.id">
                 <td>
                     {{ report.id }}
@@ -34,20 +36,25 @@
                     {{ report.maxDate }}
                 </td>
                 <td>
-                    <div style="position: relative; text-align: center" class="progress">
-                        <div style="position: absolute; right: 0; left: 0;">{{ report.progress }}%</div>
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="report.progress" aria-valuemin="0" aria-valuemax="100" :style="{ width: report.progress + '%' }"></div>
-                    </div>
+                    <span class="badge badge-success" v-if="report.completed">
+                        Completado
+                    </span>
+                    <span class="badge badge-danger" v-else-if="report.errored">
+                        Error
+                    </span>
+                    <span class="badge badge-info" v-else>
+                        En curso
+                    </span>
                 </td>
                 <td class="d-flex justify-content-around" v-if="report.completed">
-                    <a :href="report.filePath"><i class="fas fa-file-download"></i></a>
-                    <a :href="report.filePath"><i class="fas fa-trash-alt"></i></a>
+                    <i @click="downloadReport(report.filePath)" class="fas fa-file-download link fa-lg" data-bs-toggle="tooltip" title="Descargar informe"></i>
+                    <i @click="deleteReport(report.id)" class="fas fa-trash-alt link fa-lg" data-bs-toggle="tooltip" title="Borrar informe"></i>
                 </td>
                 <td class="d-flex justify-content-around" v-else>
-                    <i @click="stopReport(report.id)" class="fas fa-stop-circle link fa-lg"></i>
+                    <i @click="stopReport(report.id)" class="fas fa-stop-circle link fa-lg" data-bs-toggle="tooltip" title="Cancelar informe"></i>
                 </td>
             </tr>
-            </thead>
+            </tbody>
         </table>
     </div>
     <div style="max-width:  650px;" class="mx-auto" v-else>

@@ -16,6 +16,7 @@
           <div class="invalid-feedback" v-if="formErrors.maxDate">Indica una fecha correcta de fin.</div>
         </div>
         <cloud-error v-if="cloudError"></cloud-error>
+          <p class="text-danger" v-if="errorMessage">{{errorMessage}}</p>
         <div class="form-group">
           <ajax-button type="submit" :syncing="syncing" class="btn btn-dark btn-lg btn-block">Generar</ajax-button>
         </div>
