@@ -1,7 +1,7 @@
 <div id="signup" v-cloak>
   <div class="container-fluid pt-5 pb-5" v-if="!cloudSuccess">
     <h1 class="text-center">Create an account</h1>
-    <div style="max-width: 450px;" class="mx-auto" >
+    <div class="col-6 mx-auto" >
       <p class="text-center">Let's get started! Becoming a member is free and only takes a few minutes.</p>
       <hr/>
       <ajax-form action="signup" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-errors.sync="formErrors" :form-data="formData" :form-rules="formRules" @submitted="submittedForm()">

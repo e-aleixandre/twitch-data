@@ -10,12 +10,15 @@ parasails.registerPage('reports', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount:  function() {
+    const format = "DD-MM-YY, HH:MM";
     this.reports = this.reports.map(report => {
       if (report.completed)
       {
         report.filePath = `/reports/${report.fileName}`;
       }
 
+      report.minDate = moment(report.minDate).format(format);
+      report.maxDate = moment(report.maxDate).format(format);
       return report;
     });
   },
