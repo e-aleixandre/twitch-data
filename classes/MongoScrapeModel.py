@@ -14,7 +14,7 @@ class MongoScrapeModel(ScrapeModelInterface):
         return self.__client is not None
 
     def new_scrape(self, scrape: dict):
-        scrapes_collection = self.__db.scraps
+        scrapes_collection = self.__db.scrapes
         scrape_id = scrapes_collection.insert_one(scrape).inserted_id
         return scrape_id
 
