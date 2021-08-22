@@ -1,5 +1,5 @@
 # IMPORTS
-from classes import Twitch, Model
+from classes import Twitch, MongoScrapModel
 import threading
 import logging
 import dotenv
@@ -39,7 +39,7 @@ logging.basicConfig(filename=os.getenv("LOGS") + "/twitch-data.log", level=loggi
 twitch = Twitch.Twitch()
 
 try:
-    Model.initialize(os.getenv("DBCON"))
+    db_model = MongoScrapModel.MongoScrapModel(os.getenv("DBCON"), os.getenv("DB"))
 except Exception as e:
     logging.critical("An error occured connecting to the database. Logging the exception.")
     logging.exception(e)
@@ -53,7 +53,7 @@ semaphore = threading.Semaphore(value=15)
 # STARTING
 logging.info("Started scrapping")
 twitch.get_access_token(os.getenv("CLIENTID"), os.getenv("SECRET"))
-streamers = Model.get_streamers()
+streamers = db_model.get_streamers()
 
 # Generate threads
 for streamer in streamers:
@@ -74,7 +74,7 @@ if data:
     scrap["created_at"] = created_at
     logging.info("Memory usage: %s" % memory_usage())
     try:
-        Model.new_scrap(scrap)
+        db_model.new_scrap(scrap)
     except Exception as e:
         logging.error("Data couldn't be saved in the DB. Logging exception.")
         logging.exception(e)
@@ -90,4 +90,4 @@ else:
     logging.info("Data is empty. Nothing to save.")
 
 
-Model.close()
+db_model.close()

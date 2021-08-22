@@ -1,4 +1,4 @@
-from classes import Model, DataProcessor, ReportsModel
+from classes import MongoScrapModel, DataProcessor, PostgresReportsModel
 import dotenv
 import os
 from datetime import datetime
@@ -42,8 +42,8 @@ except Exception as e:
     exit(-1)
 
 try:
-    Model.initialize(os.getenv("DBCON"))
-    ReportsModel.initialize(os.getenv("PGCON"))
+    scrap_model = MongoScrapModel.MongoScrapModel(os.getenv("DBCON"), os.getenv("DB"))
+    reports_model = PostgresReportsModel.PostgresReportsModel(os.getenv("PGCON"))
     dbcon_time = time()
     logging.info("DBs connection time: %s" % (dbcon_time - starting_time))
 except Exception as e:
@@ -54,15 +54,15 @@ except Exception as e:
 
 try:
     pid = os.getpid()
-    ReportsModel.set_pid(report_id, pid)
+    reports_model.set_pid(report_id, pid)
 except Exception as e:
     logging.critical("An error occurred while updating the pid. Logging the exception.")
     logging.exception(e)
-    ReportsModel.set_errored(report_id)  # Could give an error as well...
+    reports_model.set_errored(report_id)  # Could give an error as well...
     exit(-1)
 
 try:
-    scraps_list = Model.get_scraps(min_date, max_date)
+    scraps_list = scrap_model.get_scraps(min_date, max_date)
     dbfetch_time = time()
     logging.info("Memory usage after get_scraps: %s" % memory_usage())
     logging.info("Scraps fetch time: %s" % (dbfetch_time - dbcon_time))
@@ -88,7 +88,7 @@ try:
 except Exception as e:
     logging.critical("An error raised while processing the data. Logging the exception.")
     logging.exception(e)
-    ReportsModel.set_errored(report_id)
+    reports_model.set_errored(report_id)
     exit(-1)
 
 try:
@@ -96,8 +96,8 @@ try:
     response = processor.export()
     export_time = time()
     logging.info("Exporting time: %s" % (export_time - instantiation_time))
-    ReportsModel.set_completed(report_id, response)
-    ReportsModel.close()
+    reports_model.set_completed(report_id, response)
+    reports_model.close()
 except Exception as e:
     logging.error("Error while exporting the data. Logging the exception.")
     logging.exception(e)
