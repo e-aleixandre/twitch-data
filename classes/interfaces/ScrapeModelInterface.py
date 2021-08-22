@@ -16,11 +16,11 @@ class ScrapeModelInterface(ABC):
         pass
 
     @abstractmethod
-    def new_scrap(self, scrap: dict):
+    def new_scrape(self, scrap: dict):
         pass
 
     @abstractmethod
-    def get_scraps(self, min_date, max_date):
+    def get_scrapes(self, min_date, max_date):
         pass
 
     @abstractmethod
