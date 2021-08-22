@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ScrapModelInterface(ABC):
+class ScrapeModelInterface(ABC):
     """
     Interface for implementing different database services that will interact with a NOSQL kind of database
     for storing and retrieving scrapes

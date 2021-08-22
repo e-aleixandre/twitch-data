@@ -1,5 +1,5 @@
 # IMPORTS
-from classes import Twitch, MongoScrapModel
+from classes import Twitch, MongoScrapeModel
 import threading
 import logging
 import dotenv
@@ -39,7 +39,7 @@ logging.basicConfig(filename=os.getenv("LOGS") + "/twitch-data.log", level=loggi
 twitch = Twitch.Twitch()
 
 try:
-    db_model = MongoScrapModel.MongoScrapModel(os.getenv("DBCON"), os.getenv("DB"))
+    db_model = MongoScrapeModel.MongoScrapeModel(os.getenv("DBCON"), os.getenv("DB"))
 except Exception as e:
     logging.critical("An error occured connecting to the database. Logging the exception.")
     logging.exception(e)
@@ -51,7 +51,7 @@ threads = []
 semaphore = threading.Semaphore(value=15)
 
 # STARTING
-logging.info("Started scrapping")
+logging.info("Started scraping")
 twitch.get_access_token(os.getenv("CLIENTID"), os.getenv("SECRET"))
 streamers = db_model.get_streamers()
 
@@ -65,23 +65,23 @@ for streamer in streamers:
 # Join threads
 _join_threads()
 
-logging.info("Finished scrapping")
+logging.info("Finished scraping")
 logging.info("Storing to the DB")
 if data:
-    scrap = dict()
-    scrap["streamers"] = data
+    scrape = dict()
+    scrape["streamers"] = data
     created_at = datetime.utcnow()
-    scrap["created_at"] = created_at
+    scrape["created_at"] = created_at
     logging.info("Memory usage: %s" % memory_usage())
     try:
-        db_model.new_scrap(scrap)
+        db_model.new_scrape(scrape)
     except Exception as e:
         logging.error("Data couldn't be saved in the DB. Logging exception.")
         logging.exception(e)
         backup_file = "%s/%s.dump" % (os.getenv("BACKUP"), created_at)
         backup_file = backup_file.replace(":", "-")
         with open(backup_file, 'wb') as bf:
-            pickle.dump(scrap, bf, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(scrape, bf, pickle.HIGHEST_PROTOCOL)
         logging.info("Data stored in file: %s.dump" % backup_file)
         # TODO: What if an exception raises during file writing? Sheeeeeeeeeeeeeeeeeeeeet
     else:

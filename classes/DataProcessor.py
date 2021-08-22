@@ -17,8 +17,8 @@ class DataProcessor:
     @staticmethod
     def __build_streamers_map__(data: List) -> Dict[str, Set[str]]:
         streamers_map = dict()
-        for scrap in data:
-            for streamer, viewers in scrap["streamers"].items():
+        for scrape in data:
+            for streamer, viewers in scrape["streamers"].items():
                 try:
                     streamers_map[streamer] |= set(viewers)  # We assume the key already exists
                 except KeyError:

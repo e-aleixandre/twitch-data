@@ -1,9 +1,9 @@
 from pymongo import MongoClient
 from datetime import datetime
-from .interfaces.ScrapModelInterface import ScrapModelInterface
+from .interfaces.ScrapeModelInterface import ScrapeModelInterface
 
 
-class MongoScrapModel(ScrapModelInterface):
+class MongoScrapeModel(ScrapeModelInterface):
 
     def __init__(self, constring: str, database: str):
         self.__client = MongoClient(constring)
@@ -13,13 +13,13 @@ class MongoScrapModel(ScrapModelInterface):
     def _check(self) -> bool:
         return self.__client is not None
 
-    def new_scrap(self, scrap: dict):
-        scraps_collection = self.__db.scraps
-        scrap_id = scraps_collection.insert_one(scrap).inserted_id
-        return scrap_id
+    def new_scrape(self, scrape: dict):
+        scrapes_collection = self.__db.scraps
+        scrape_id = scrapes_collection.insert_one(scrape).inserted_id
+        return scrape_id
 
-    def get_scraps(self, min_date: datetime, max_date: datetime):
-        scraps_collection = self.__db.scraps
+    def get_scrapes(self, min_date: datetime, max_date: datetime):
+        scrapes_collection = self.__db.scrapes
         params = {
             "created_at": {
                 "$gte": min_date,
@@ -27,12 +27,12 @@ class MongoScrapModel(ScrapModelInterface):
             }
         }
 
-        scraps = []
+        scrapes = []
 
-        for scrap in scraps_collection.find(params):
-            scraps.append(scrap)
+        for scrape in scrapes_collection.find(params):
+            scrapes.append(scrape)
 
-        return scraps
+        return scrapes
 
     def get_streamers(self, limit: int = 0):
         streamers_collection = self.__db.streamers

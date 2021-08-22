@@ -1,4 +1,4 @@
-from classes import MongoScrapModel, DataProcessor, PostgresReportsModel
+from classes import MongoScrapeModel, DataProcessor, PostgresReportsModel
 import dotenv
 import os
 from datetime import datetime
@@ -42,7 +42,7 @@ except Exception as e:
     exit(-1)
 
 try:
-    scrap_model = MongoScrapModel.MongoScrapModel(os.getenv("DBCON"), os.getenv("DB"))
+    scrape_model = MongoScrapeModel.MongoScrapeModel(os.getenv("DBCON"), os.getenv("DB"))
     reports_model = PostgresReportsModel.PostgresReportsModel(os.getenv("PGCON"))
     dbcon_time = time()
     logging.info("DBs connection time: %s" % (dbcon_time - starting_time))
@@ -62,17 +62,17 @@ except Exception as e:
     exit(-1)
 
 try:
-    scraps_list = scrap_model.get_scraps(min_date, max_date)
+    scrapes_list = scrape_model.get_scrapes(min_date, max_date)
     dbfetch_time = time()
-    logging.info("Memory usage after get_scraps: %s" % memory_usage())
-    logging.info("Scraps fetch time: %s" % (dbfetch_time - dbcon_time))
+    logging.info("Memory usage after get_scrapes: %s" % memory_usage())
+    logging.info("Scrapes fetch time: %s" % (dbfetch_time - dbcon_time))
 except Exception as e:
     logging.critical("An error occurred while fetching the database. Logging the exception.")
     logging.exception(e)
 
     exit(-1)
 
-if not scraps_list:
+if not scrapes_list:
     logging.warning("No data. This could be caused by an undetected error.")
     logging.warning("Min date: %s\tMax date: %s" % (min_date, max_date))
 
@@ -80,7 +80,7 @@ if not scraps_list:
 
 try:
     logging.info("Processing the data.")
-    processor = DataProcessor.DataProcessor(scraps_list, min_date, max_date, os.getenv("EXPORTS"))
+    processor = DataProcessor.DataProcessor(scrapes_list, min_date, max_date, os.getenv("EXPORTS"))
     instantiation_time = time()
     logging.info("Memory usage after instantiating the DataProcessor: %s" % memory_usage())
     logging.info("Time to instantiate DataProcessor: %s" % (instantiation_time - dbfetch_time))
