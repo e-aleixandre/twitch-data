@@ -12,10 +12,38 @@ const {User, Report, sequelize} = require('./database');
 require('dotenv').config({path: '../.env.local'});
 
 /**
+ * Constants
+ */
+const maxReports = 1;
+
+/**
+ * Middleware definitions
+ */
+async function limitReports(ctx, next) {
+
+    const currentReports = await Report.count({
+        where: {
+            errored: false,
+            completed: false
+        }
+    });
+
+    if (currentReports < maxReports)
+    {
+        return next();
+    } else {
+        ctx.body = {
+            ok: false,
+            msg: 'ER_MAX_REPORTS'
+        }
+    }
+}
+
+/**
  * Setup
  **/
 
-router.post('/', koaBody(), new_report).get('/', async function (ctx) {
+router.post('/', limitReports, koaBody(), new_report).get('/', async function (ctx) {
     ctx.body = "Ok"
 });
 
@@ -94,5 +122,3 @@ async function new_report(ctx) {
 
     }
 }
-
-
