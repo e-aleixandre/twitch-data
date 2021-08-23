@@ -1,4 +1,4 @@
-from classes import MongoScrapeModel, DataProcessor, PostgresReportsModel
+from classes import MongoScrapeModel, DataProcessor, MariaDBReportsModel
 import dotenv
 import os
 from datetime import datetime
@@ -38,18 +38,16 @@ try:
 except Exception as e:
     logging.critical("An error occurred while parsing the dates. Logging the exception.")
     logging.exception(e)
-
     exit(-1)
 
 try:
     scrape_model = MongoScrapeModel.MongoScrapeModel(os.getenv("DBCON"), os.getenv("DB"))
-    reports_model = PostgresReportsModel.PostgresReportsModel(os.getenv("PGCON"))
+    reports_model = MariaDBReportsModel.MariaDBReportsModel(os.getenv("FRONTENDDB_USER"), os.getenv("FRONTENDDB_PASS"), os.getenv("FRONTENDDB_HOST"), os.getenv("FRONTENDDB_NAME"))
     dbcon_time = time()
     logging.info("DBs connection time: %s" % (dbcon_time - starting_time))
 except Exception as e:
     logging.critical("An error occurred connecting to the database. Logging the exception.")
     logging.exception(e)
-
     exit(-1)
 
 try:
@@ -69,12 +67,14 @@ try:
 except Exception as e:
     logging.critical("An error occurred while fetching the database. Logging the exception.")
     logging.exception(e)
+    reports_model.set_errored(report_id)
 
     exit(-1)
 
 if not scrapes_list:
     logging.warning("No data. This could be caused by an undetected error.")
     logging.warning("Min date: %s\tMax date: %s" % (min_date, max_date))
+    reports_model.set_errored(report_id)
 
     exit(0)
 
@@ -97,7 +97,9 @@ try:
     export_time = time()
     logging.info("Exporting time: %s" % (export_time - instantiation_time))
     reports_model.set_completed(report_id, response)
-    reports_model.close()
 except Exception as e:
     logging.error("Error while exporting the data. Logging the exception.")
     logging.exception(e)
+    reports_model.set_errored(report_id)
+finally:
+    reports_model.close()

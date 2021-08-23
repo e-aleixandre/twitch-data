@@ -26,7 +26,8 @@ module.exports = {
         }),
     Report: sequelize.define('Report', {
             filename: {
-                type: DataTypes.STRING
+                type: DataTypes.STRING,
+                unique: true
             },
             min_date: {
                 type: DataTypes.DATE,
@@ -38,23 +39,28 @@ module.exports = {
             },
             progress: {
                 type: DataTypes.FLOAT,
-                default: 0.0
+                defaultValue: 0.0
             },
             completed: {
                 type: DataTypes.BOOLEAN,
-                default: false
+                defaultValue: false
             },
             errored: {
                 type: DataTypes.BOOLEAN,
-                default: false
+                defaultValue: false
             },
             pid: {
                 type: DataTypes.INTEGER,
-                default: 0
+                defaultValue: 0
             }
         },
         {
             createdAt: 'created_at',
-            updatedAt: 'updated_at'
+            updatedAt: 'updated_at',
+            uniqueKeys: {
+                dates_unique: {
+                    fields: ['min_date', 'max_date']
+                }
+            }
         })
 }

@@ -2,6 +2,7 @@ pymongo
 pandas
 memory_profiler
 psycopg2-binary
+mariadb
 requests
 tabulate
 python-dotenv
