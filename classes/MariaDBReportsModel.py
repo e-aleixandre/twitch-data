@@ -1,4 +1,5 @@
 from mariadb import connect
+import secrets
 from .interfaces.ReportsModelInterface import ReportsModelInterface
 
 
@@ -27,10 +28,18 @@ class MariaDBReportsModel(ReportsModelInterface):
         cursor.close()
         self.__con.commit()
 
-    def set_completed(self, id: int, filename: str):
+    def set_completed_and_filename(self, id: int, filename: str):
         cursor = self.__con.cursor()
         query = "UPDATE reports SET completed = TRUE, filename = %s, progress = 100.0 WHERE id = %s"
         data = (filename, id,)
+        cursor.execute(query, data)
+        cursor.close()
+        self.__con.commit()
+
+    def set_completed(self, id: int):
+        cursor = self.__con.cursor()
+        query = "UPDATE reports SET completed = TRUE, progress = 100.0 WHERE id = %s"
+        data = (id,)
         cursor.execute(query, data)
         cursor.close()
         self.__con.commit()
@@ -42,6 +51,17 @@ class MariaDBReportsModel(ReportsModelInterface):
         cursor.execute(query, data)
         cursor.close()
         self.__con.commit()
+
+    def set_notification_token(self, id: int) -> str:
+        cursor = self.__con.cursor()
+        token = secrets.token_hex(nbytes=16)
+        query = "UPDATE reports SET token = %s WHERE id = %s"
+        data = (token, id,)
+        cursor.execute(query, data)
+        cursor.close()
+        self.__con.commit()
+
+        return token
 
     def close(self):
         if self.__initialized:

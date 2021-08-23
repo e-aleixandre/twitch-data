@@ -18,6 +18,20 @@ module.exports = {
             name: {
                 type: DataTypes.STRING,
                 allowNull: false
+            },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true
+            },
+            email_verified_at: {
+                type: DataTypes.DATE
+            },
+            password: {
+                type: DataTypes.STRING
+            },
+            remember_token: {
+                type: DataTypes.STRING(100)
             }
         },
         {
@@ -49,6 +63,9 @@ module.exports = {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
             },
+            token: {
+                type: DataTypes.STRING
+            },
             pid: {
                 type: DataTypes.INTEGER,
                 defaultValue: 0
@@ -57,10 +74,15 @@ module.exports = {
         {
             createdAt: 'created_at',
             updatedAt: 'updated_at',
-            uniqueKeys: {
-                dates_unique: {
-                    fields: ['min_date', 'max_date']
+            indexes: [
+                {
+                    name: 'pending_index',
+                    fields: ['errored', 'completed']
+                },
+                {
+                    name: 'token_index',
+                    fields: ['token']
                 }
-            }
+            ]
         })
 }

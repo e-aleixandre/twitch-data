@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from datetime import datetime
 
 class ReportsModelInterface(ABC):
 
@@ -16,11 +16,15 @@ class ReportsModelInterface(ABC):
         pass
 
     @abstractmethod
-    def set_completed(self, id: int, filename: str):
+    def set_completed(self, id: int):
         pass
 
     @abstractmethod
     def set_errored(self, id: int):
+        pass
+
+    @abstractmethod
+    def set_notification_token(self, id: int) -> str:
         pass
 
     @abstractmethod

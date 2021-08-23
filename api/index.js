@@ -28,8 +28,7 @@ async function limitReports(ctx, next) {
         }
     });
 
-    if (currentReports < maxReports)
-    {
+    if (currentReports < maxReports) {
         return next();
     } else {
         ctx.body = {
@@ -51,7 +50,7 @@ app.use(router.routes());
 
 app.listen(3000);
 
-sequelize.sync({ force: true });
+sequelize.sync({force: true});
 
 /**
  * ROUTES
@@ -71,8 +70,7 @@ async function new_report(ctx) {
     // Then we validate them
     const regex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 
-    if (!regex.test(data.minTimestamp) || !regex.test(data.maxTimestamp))
-    {
+    if (!regex.test(data.minTimestamp) || !regex.test(data.maxTimestamp)) {
         ctx.body = {
             ok: false,
             msg: 'ER_INVALID_DATE'
@@ -103,12 +101,11 @@ async function new_report(ctx) {
             }
         }
 
-    } catch(e) {
+    } catch (e) {
 
         let message;
 
-        if (e.original)
-        {
+        if (e.original) {
             message = e.original.code;
         } else {
             // Handle other types of exceptions
