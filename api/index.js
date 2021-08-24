@@ -16,9 +16,7 @@ require('dotenv').config({path: '../.env.local'});
  **/
 
 router.post('/reports', koaBody(), new_report)
-      .get('/', async function (ctx) {
-        ctx.body = "Ok"
-      });
+      .get('/reports', download_report);
 
 app.use(router.routes());
 
@@ -29,6 +27,14 @@ sequelize.sync({force: true});
 /**
  * ROUTES
  */
+// Send report file
+async function download_report(ctx) {
+
+    const { filename } = ctx.query;
+
+    // https://blog.cpming.top/p/koa-write-to-response
+
+}
 
 // Create new report
 async function new_report(ctx) {
