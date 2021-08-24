@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
+
 class ReportsModelInterface(ABC):
 
     @abstractmethod
@@ -29,4 +30,8 @@ class ReportsModelInterface(ABC):
 
     @abstractmethod
     def close(self):
+        pass
+
+    @abstractmethod
+    def commit(self):
         pass

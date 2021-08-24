@@ -17,8 +17,6 @@ class MariaDBReportsModel(ReportsModelInterface):
         cursor.execute(query, data)
         cursor.close()
 
-        self.__con.commit()
-
     def set_pid(self, id: int, pid: int):
         cursor = self.__con.cursor()
 
@@ -26,7 +24,6 @@ class MariaDBReportsModel(ReportsModelInterface):
         data = (pid, id,)
         cursor.execute(query, data)
         cursor.close()
-        self.__con.commit()
 
     def set_completed_and_filename(self, id: int, filename: str):
         cursor = self.__con.cursor()
@@ -34,7 +31,6 @@ class MariaDBReportsModel(ReportsModelInterface):
         data = (filename, id,)
         cursor.execute(query, data)
         cursor.close()
-        self.__con.commit()
 
     def set_completed(self, id: int):
         cursor = self.__con.cursor()
@@ -42,7 +38,6 @@ class MariaDBReportsModel(ReportsModelInterface):
         data = (id,)
         cursor.execute(query, data)
         cursor.close()
-        self.__con.commit()
 
     def set_errored(self, id: int):
         cursor = self.__con.cursor()
@@ -50,7 +45,6 @@ class MariaDBReportsModel(ReportsModelInterface):
         data = (id,)
         cursor.execute(query, data)
         cursor.close()
-        self.__con.commit()
 
     def set_notification_token(self, id: int) -> str:
         cursor = self.__con.cursor()
@@ -59,10 +53,12 @@ class MariaDBReportsModel(ReportsModelInterface):
         data = (token, id,)
         cursor.execute(query, data)
         cursor.close()
-        self.__con.commit()
 
         return token
 
     def close(self):
         if self.__initialized:
             self.__con.close()
+
+    def commit(self):
+        self.__con.commit()

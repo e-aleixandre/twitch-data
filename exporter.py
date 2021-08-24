@@ -19,11 +19,20 @@ def update_and_notify(reports_model, id, errored: bool = False):
     else:
         reports_model.set_completed(id)
 
+    # We have to commit so Laravel has an unlocked row
+    reports_model.commit()
+
     url = os.getenv("notification_url")
 
-    requests.get(url, params={
-        token: token
+    response = requests.get(url, params={
+        "token": token
     })
+
+    if response.status_code == 200 and response.json()["ok"]:
+        logging.info("Notification sent successfully")
+    else:
+        logging.warning("Couldn't notify the user")
+        logging.warning(response)
 
 
 # Time calculation variables
