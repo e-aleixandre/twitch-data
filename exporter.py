@@ -60,8 +60,8 @@ logging.basicConfig(filename=os.getenv("LOGS") + "/exporter.log",
 logging.info("Exporter started.")
 
 try:
-    min_date = datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M")
-    max_date = datetime.strptime(sys.argv[2], "%Y-%m-%dT%H:%M")
+    min_date = datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M:%S.%fZ")
+    max_date = datetime.strptime(sys.argv[2], "%Y-%m-%dT%H:%M:%S.%fZ")
     report_id = int(sys.argv[3])
 except Exception as e:
     logging.critical("An error occurred while parsing the dates. Logging the exception.")

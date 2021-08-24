@@ -12,39 +12,13 @@ const {User, Report, sequelize} = require('./database');
 require('dotenv').config({path: '../.env.local'});
 
 /**
- * Constants
- */
-const maxReports = 1;
-
-/**
- * Middleware definitions
- */
-async function limitReports(ctx, next) {
-
-    const currentReports = await Report.count({
-        where: {
-            errored: false,
-            completed: false
-        }
-    });
-
-    if (currentReports < maxReports) {
-        return next();
-    } else {
-        ctx.body = {
-            ok: false,
-            msg: 'ER_MAX_REPORTS'
-        }
-    }
-}
-
-/**
  * Setup
  **/
 
-router.post('/', limitReports, koaBody(), new_report).get('/', async function (ctx) {
-    ctx.body = "Ok"
-});
+router.post('/reports', koaBody(), new_report)
+      .get('/', async function (ctx) {
+        ctx.body = "Ok"
+      });
 
 app.use(router.routes());
 
@@ -60,33 +34,38 @@ sequelize.sync({force: true});
 async function new_report(ctx) {
 
     // For compatibility purposes, we get date + time, and we merge them into a suitable timestamp
-    const {minDate, minTime, maxDate, maxTime} = ctx.request.body;
+    const { token } = ctx.request.body;
 
-    const data = {
-        minTimestamp: minDate + 'T' + minTime,
-        maxTimestamp: maxDate + 'T' + maxTime
-    };
+    const report = await Report.findOne({
+        where: {
+            token
+        }
+    });
 
-    // Then we validate them
-    const regex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+    // If the report is not found
+    if (!report)
+    {
+        ctx.status = 404;
 
-    if (!regex.test(data.minTimestamp) || !regex.test(data.maxTimestamp)) {
         ctx.body = {
             ok: false,
-            msg: 'ER_INVALID_DATE'
+            msg: "ER_NOT_FOUND"
         }
 
         return;
     }
 
+    // Removing the token so the endpoint is not accessible anymore
+    report.token = null;
+    await report.save();
+
+    // Instantiating the child process
     try {
 
         const out = openSync('../logs/out.log', 'a');
         const err = openSync('../logs/out.log', 'a');
 
-        const report = await Report.create({max_date: data.maxTimestamp, min_date: data.minTimestamp});
-
-        const program = spawn('py', ['../exporter.py', data.maxTimestamp, data.minTimestamp, report.id], {
+        const program = spawn('py', ['../exporter.py', report.min_date.toISOString(), report.max_date.toISOString(), report.id], {
             detached: true,
             stdio: ['ignore', out, err]
         });
@@ -94,11 +73,7 @@ async function new_report(ctx) {
         program.unref();
 
         ctx.body = {
-            ok: true,
-            data: {
-                id: report.id,
-                pid: program.pid
-            }
+            ok: true
         }
 
     } catch (e) {
