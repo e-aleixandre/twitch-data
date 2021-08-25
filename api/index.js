@@ -8,6 +8,8 @@ const koaBody = require('koa-body');
 const {spawn} = require('child_process');
 const {openSync} = require('fs');
 const {User, Report, sequelize} = require('./database');
+const fs = require('fs');
+const mime = require('mime-types');
 
 require('dotenv').config({path: '../.env.local'});
 
@@ -22,8 +24,6 @@ app.use(router.routes());
 
 app.listen(3000);
 
-sequelize.sync({force: true});
-
 /**
  * ROUTES
  */
@@ -32,6 +32,35 @@ async function download_report(ctx) {
 
     const { filename } = ctx.query;
 
+    // TODO: Verify filename for attacks? The PHP backend is the only IP that can fetch this
+    //  Sequelize most probably uses prepared statements, and if the filename exists then it's safe
+    const report = await Report.findOne({
+        where: {
+            filename
+        }
+    });
+
+    if (!report)
+    {
+        ctx.throw(404);
+        ctx.body = {
+            ok: false,
+            msg: 'ER_NOT_FOUND'
+        }
+    }
+
+    const path = `../temp/${filename}`;
+    const mimetype = mime.lookup(path);
+    const src = fs.createReadStream(path);
+
+    ctx.type = mimetype;
+    ctx.response.set("content-disposition", "attachment;");
+    ctx.body = {
+        ok: true,
+        data: {
+            stream: src
+        }
+    };
     // https://blog.cpming.top/p/koa-write-to-response
 
 }

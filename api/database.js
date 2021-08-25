@@ -38,6 +38,7 @@ module.exports = {
             createdAt: 'created_at',
             updatedAt: 'updated_at'
         }),
+
     Report: sequelize.define('Report', {
             filename: {
                 type: DataTypes.STRING,
