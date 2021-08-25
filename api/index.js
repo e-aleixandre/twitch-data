@@ -24,6 +24,8 @@ app.use(router.routes());
 
 app.listen(3000);
 
+// sequelize.sync({force: true});
+
 /**
  * ROUTES
  */
@@ -55,12 +57,14 @@ async function download_report(ctx) {
 
     ctx.type = mimetype;
     ctx.response.set("content-disposition", "attachment;");
-    ctx.body = {
+    /*ctx.body = {
         ok: true,
         data: {
             stream: src
         }
     };
+     */
+    ctx.body = src;
     // https://blog.cpming.top/p/koa-write-to-response
 
 }
