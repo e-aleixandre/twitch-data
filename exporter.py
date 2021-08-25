@@ -93,6 +93,7 @@ else:
 try:
     pid = os.getpid()
     reports_model.set_pid(report_id, pid)
+    reports_model.commit()
 except Exception as e:
     logging.critical("An error occurred while updating the pid. Logging the exception.")
     logging.exception(e)
