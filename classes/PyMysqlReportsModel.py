@@ -27,10 +27,10 @@ class PyMysqlReportsModel(ReportsModelInterface):
         cursor.execute(query, data)
         cursor.close()
 
-    def set_completed_and_filename(self, id: int, filename: str):
+    def set_filename(self, id: int, filename: str):
         self.__con.ping(reconnect=True)
         cursor = self.__con.cursor()
-        query = "UPDATE reports SET completed = TRUE, filename = %s, progress = 100.0 WHERE id = %s"
+        query = "UPDATE reports SET filename = %s WHERE id = %s"
         data = (filename, id,)
         cursor.execute(query, data)
         cursor.close()

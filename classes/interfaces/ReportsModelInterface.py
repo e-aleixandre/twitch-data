@@ -29,6 +29,10 @@ class ReportsModelInterface(ABC):
         pass
 
     @abstractmethod
+    def set_filename(selfself, filename: str) -> str:
+        pass
+
+    @abstractmethod
     def close(self):
         pass
 

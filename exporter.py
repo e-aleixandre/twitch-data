@@ -128,7 +128,6 @@ try:
     instantiation_time = time()
     logging.info("Memory usage after instantiating the DataProcessor: %s" % memory_usage())
     logging.info("Time to instantiate DataProcessor: %s" % (instantiation_time - dbfetch_time))
-
 except Exception as e:
     logging.critical("An error raised while processing the data. Logging the exception.")
     logging.exception(e)
@@ -141,11 +140,11 @@ try:
     response = processor.export()
     export_time = time()
     logging.info("Exporting time: %s" % (export_time - instantiation_time))
-    reports_model.set_completed_and_filename(report_id, response)
+    reports_model.set_filename(report_id, response)
 except Exception as e:
     logging.error("Error while exporting the data. Logging the exception.")
     logging.exception(e)
-    reports_model.set_errored(report_id)
+    update_and_notify(reports_model, report_id, errored=True)
 finally:
     update_and_notify(reports_model, report_id)
     reports_model.close()
