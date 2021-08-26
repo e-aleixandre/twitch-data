@@ -29,7 +29,11 @@ class ReportsModelInterface(ABC):
         pass
 
     @abstractmethod
-    def set_filename(selfself, filename: str) -> str:
+    def set_filename(self, filename: str) -> str:
+        pass
+
+    @abstractmethod
+    def get_notify(self, id: int) -> bool:
         pass
 
     @abstractmethod

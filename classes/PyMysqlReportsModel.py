@@ -62,6 +62,18 @@ class PyMysqlReportsModel(ReportsModelInterface):
 
         return token
 
+    def get_notify(self, id: int) -> bool:
+        self.__con.ping(reconnect=True)
+        cursor = self.__con.cursor()
+
+        query = "SELECT COUNT(*) FROM reports WHERE id = %s AND notify=1"
+        data = (id, )
+        cursor.execute(query, data)
+
+        (amount, ) = cursor.fetchone()
+
+        return amount != 0
+
     def close(self):
         if self.__con.open:
             self.__con.close()

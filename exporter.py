@@ -12,27 +12,28 @@ import sys
 # UTILITY FUNCTIONS
 
 def update_and_notify(reports_model, id, errored: bool = False):
-    token = reports_model.set_notification_token(id)
-
     if errored:
         reports_model.set_errored(id)
     else:
         reports_model.set_completed(id)
 
-    # We have to commit so Laravel has an unlocked row
-    reports_model.commit()
+    if errored or reports_model.get_notify(id):
+        token = reports_model.set_notification_token(id)
+        reports_model.commit()
 
-    url = os.getenv("NOTIFICATION_URL")
+        url = os.getenv("NOTIFICATION_URL")
 
-    response = requests.get(url, params={
-        "token": token
-    })
+        response = requests.get(url, params={
+            "token": token
+        })
 
-    if response.status_code == 200 and response.json()["ok"]:
-        logging.info("Notification sent successfully")
+        if response.status_code == 200 and response.json()["ok"]:
+            logging.info("Notification sent successfully")
+        else:
+            logging.warning("Couldn't notify the user")
+            logging.warning(response)
     else:
-        logging.warning("Couldn't notify the user")
-        logging.warning(response)
+        reports_model.commit()
 
 
 # Time calculation variables
