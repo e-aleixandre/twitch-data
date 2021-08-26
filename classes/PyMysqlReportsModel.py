@@ -66,13 +66,13 @@ class PyMysqlReportsModel(ReportsModelInterface):
         self.__con.ping(reconnect=True)
         cursor = self.__con.cursor()
 
-        query = "SELECT COUNT(*) FROM reports WHERE id = %s AND notify=1"
+        query = "SELECT COUNT(*) AS amount FROM reports WHERE id = %s AND notify=1"
         data = (id, )
         cursor.execute(query, data)
 
-        (amount, ) = cursor.fetchone()
+        response = cursor.fetchone()
 
-        return amount != 0
+        return response['amount'] != 0
 
     def close(self):
         if self.__con.open:
