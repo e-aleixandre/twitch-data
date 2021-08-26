@@ -109,7 +109,7 @@ async function stop_report(ctx) {
 
         const proc = results[0];
 
-        if (proc.name === 'py.exe' || proc.name === 'python.exe' || proc.name === 'python' || proc.name === 'python3') {
+        if (proc && proc.name === process.env.PYTHON_EXEC) {
             process.kill(proc.pid);
         }
     });
