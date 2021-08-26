@@ -191,7 +191,7 @@ async function new_report(ctx) {
         const out = openSync('../logs/out.log', 'a');
         const err = openSync('../logs/out.log', 'a');
 
-        const program = spawn('py', [process.env.PYTHON_EXEC, report.min_date.toISOString(), report.max_date.toISOString(), report.id], {
+        const program = spawn(process.env.PYTHON_EXEC, ['../exporter.py', report.min_date.toISOString(), report.max_date.toISOString(), report.id], {
             detached: true,
             stdio: ['ignore', out, err]
         });
