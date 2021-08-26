@@ -12,6 +12,10 @@ const fs = require('fs');
 const mime = require('mime-types');
 const findProcess = require('find-process');
 const send = require("koa-send");
+const http = require('http');
+const https = require('https');
+const { default: enforceHttps } = require('koa-sslify');
+const path = require('path');
 
 
 require('dotenv').config({path: '../.env.local'});
@@ -19,7 +23,6 @@ require('dotenv').config({path: '../.env.local'});
 /**
  * Setup
  **/
-
 router.post('/reports', koaBody(), new_report)
     .get('/reports', download_report)
     .post('/reports/:id/stop', koaBody(), stop_report)
@@ -28,9 +31,18 @@ router.post('/reports', koaBody(), new_report)
 
 app.use(router.routes());
 
-app.listen(8080, process.env.IP);
+app.use(enforceHttps({
+    port: 8081
+}));
 
-// sequelize.sync({force: true});
+const options = {
+    key: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/fullchain.pem'))
+}
+
+http.createServer(app.callback()).listen(8080);
+https.createServer(options, app.callback()).listen(8081);
+
 
 /**
  * ROUTES
