@@ -22,7 +22,7 @@ def update_and_notify(reports_model, id, errored: bool = False):
     # We have to commit so Laravel has an unlocked row
     reports_model.commit()
 
-    url = os.getenv("notification_url")
+    url = os.getenv("NOTIFICATION_URL")
 
     response = requests.get(url, params={
         "token": token
