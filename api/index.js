@@ -25,7 +25,7 @@ router.post('/reports', koaBody(), new_report)
 
 app.use(router.routes());
 
-app.listen(8080);
+app.listen(8080, process.env.IP);
 
 // sequelize.sync({force: true});
 
