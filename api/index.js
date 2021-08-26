@@ -36,7 +36,7 @@ app.use(enforceHttps({
 }));
 
 const options = {
-    key: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/key.pem')),
+    key: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/privkey.pem')),
     cert: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/fullchain.pem'))
 }
 
