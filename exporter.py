@@ -1,4 +1,4 @@
-from classes import MongoScrapeModel, DataProcessor, MariaDBReportsModel
+from classes import MongoScrapeModel, DataProcessor, PyMysqlReportsModel
 import requests
 import dotenv
 import os
@@ -69,7 +69,7 @@ except Exception as e:
     exit(-1)
 
 try:
-    reports_model = MariaDBReportsModel.MariaDBReportsModel(os.getenv("FRONTENDDB_USER"), os.getenv("FRONTENDDB_PASS"),
+    reports_model = PyMysqlReportsModel.PyMysqlReportsModel(os.getenv("FRONTENDDB_USER"), os.getenv("FRONTENDDB_PASS"),
                                                             os.getenv("FRONTENDDB_HOST"), os.getenv("FRONTENDDB_NAME"))
 except Exception as e:
     logging.critical("An error occurred connecting to the Reports DB. Logging the exception.")
