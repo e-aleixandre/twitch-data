@@ -119,7 +119,7 @@ module.exports = function(path) {
         }
 
         await send(ctx, filename, {
-            root: path.join(__dirname, process.env.EXPORTS)
+            root: path.join(__dirname,'../', process.env.EXPORTS)
         });
     }
 
