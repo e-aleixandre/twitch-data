@@ -425,6 +425,7 @@ dmypy.json
 cython_debug/
 time_experiment.py
 ModelTester.py
-
+/api/.testing
+*.ignore.js
 node_modules/
 /test/

@@ -11,6 +11,8 @@ const {User, Report, sequelize} = require('./database');
 const fs = require('fs');
 const mime = require('mime-types');
 const findProcess = require('find-process');
+const send = require("koa-send");
+
 
 require('dotenv').config({path: '../.env.local'});
 
@@ -22,6 +24,7 @@ router.post('/reports', koaBody(), new_report)
     .get('/reports', download_report)
     .post('/reports/:id/stop', koaBody(), stop_report)
     .post('/reports/:id/destroy', koaBody(), delete_report)
+    .get('/.well-known/acme-challenge/:file', acme_challenge);
 
 app.use(router.routes());
 
@@ -219,4 +222,20 @@ async function new_report(ctx) {
         }
 
     }
+}
+
+/**
+ * Function for CERTBOT to generate an SSL Certificate
+ * @param ctx
+ * @returns {Promise<void>}
+ */
+async function acme_challenge(ctx) {
+    const {file} = ctx.params;
+
+    if (!file)
+        ctx.throw(404);
+
+    await send(ctx, file, {
+        root: __dirname + '/.well-known/acme-challenge/'
+    });
 }
