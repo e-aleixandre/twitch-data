@@ -25,7 +25,7 @@ router.post('/reports', koaBody(), new_report)
 
 app.use(router.routes());
 
-app.listen(3000);
+app.listen(8080);
 
 // sequelize.sync({force: true});
 
@@ -109,7 +109,7 @@ async function stop_report(ctx) {
 
         const proc = results[0];
 
-        if (proc.name === 'py.exe' || proc.name === 'python.exe') {
+        if (proc.name === 'py.exe' || proc.name === 'python.exe' || proc.name === 'python' || proc.name === 'python3') {
             process.kill(proc.pid);
         }
     });
@@ -191,7 +191,7 @@ async function new_report(ctx) {
         const out = openSync('../logs/out.log', 'a');
         const err = openSync('../logs/out.log', 'a');
 
-        const program = spawn('py', ['../exporter.py', report.min_date.toISOString(), report.max_date.toISOString(), report.id], {
+        const program = spawn('py', [process.env.PYTHON_EXEC, report.min_date.toISOString(), report.max_date.toISOString(), report.id], {
             detached: true,
             stdio: ['ignore', out, err]
         });
