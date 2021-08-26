@@ -3,7 +3,6 @@ const koaBody = require('koa-body');
 const {Report} = require("./database");
 const fs = require("fs");
 const findProcess = require("find-process");
-const mime = require("mime-types");
 const {openSync} = require("fs");
 const {spawn} = require("child_process");
 const send = require("koa-send");
