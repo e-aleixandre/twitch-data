@@ -211,7 +211,13 @@ module.exports = function (path) {
         .post('/reports/:id/stop', koaBody(), reportFromIdAndToken, clearToken, stopReport)
         .post('/reports/:id/destroy', koaBody(), reportFromIdAndToken, clearToken, deleteReport)
         .get('/.well-known/acme-challenge/:file', acme_challenge)
-        .post('/reports/:id/restart', koaBody(), reportFromIdAndToken, clearToken, isErrored, restartReport);
+        .post('/reports/:id/restart', koaBody(), reportFromIdAndToken, clearToken, isErrored, restartReport)
+        .get('/tls', async ctx => {
+            const context = JSON.stringify(ctx, undefined, 4);
+            console.log(context);
+
+            ctx.body = context;
+        });
 
     return router;
 }

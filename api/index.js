@@ -33,6 +33,6 @@ if (process.env.ENVIRONMENT === 'production')
     });
 }
 
-http.createServer(app.callback()).listen(8080, function() {
+https.createServer(app.callback()).listen(8080, function() {
     console.log("Listening with HTTP on port 8080");
 });
