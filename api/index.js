@@ -9,13 +9,12 @@ const https = require('https');
 const { default: enforceHttps } = require('koa-sslify');
 const path = require('path');
 const router = require('./router')(path);
-
+//const router = require('@koa/router')();
 require('dotenv').config({path: '../.env.local'});
 
 /**
  * Setup
  **/
-
 
 app.use(router.routes());
 
@@ -29,7 +28,11 @@ if (process.env.ENVIRONMENT === 'production')
         key: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/privkey.pem')),
         cert: fs.readFileSync(path.join(__dirname, process.env.CERTS_FOLDER, '/fullchain.pem'))
     }
-    https.createServer(options, app.callback()).listen(8081);
+    https.createServer(options, app.callback()).listen(8081, function() {
+        console.log("Listening with HTTPS on port 8081");
+    });
 }
 
-http.createServer(app.callback()).listen(8080);
+http.createServer(app.callback()).listen(8080, function() {
+    console.log("Listening with HTTP on port 8080");
+});
