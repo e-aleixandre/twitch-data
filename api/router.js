@@ -30,8 +30,8 @@ module.exports = function (path) {
     const needsFilename = async (ctx, next) => {
         const {filename} = ctx.query;
 
-        // TODO: Verify filename for attacks? The PHP backend is the only IP that can fetch this
-        //  Sequelize most probably uses prepared statements, and if the filename exists then it's safe
+        // TODO: Filename was used at first to grant some security (only database knows the filename)
+        //  Since I implemented mTLS, maybe it's better to stay with using :id
         const report = await Report.count({
             where: {
                 filename
