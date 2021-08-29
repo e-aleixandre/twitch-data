@@ -11,42 +11,12 @@ module.exports = function (path) {
      * Middleware
      */
 
-    const reportFromIdAndToken = async (ctx, next) => {
-        const {id} = ctx.params;
-        const {token} = ctx.request.body;
-
-        const report = await Report.findOne(
-            {
-                where: {
-                    id,
-                    token
-                }
-            }
-        );
-
-        if (report) {
-            ctx.state.report = report;
-            await next();
-        } else
-            ctx.throw(404);
-    }
-
-    const clearToken = async (ctx, next) => {
-        const {report} = ctx.state;
-
-        await report.update({
-            token: null
-        });
-
-        await next();
-    }
-
-    const reportFromToken = async (ctx, next) => {
-        const {token} = ctx.request.body;
+    const reportFromId = async (ctx, next) => {
+        const {id} = ctx.request.body;
 
         const report = await Report.findOne({
             where: {
-                token
+                id
             }
         });
 
@@ -202,21 +172,17 @@ module.exports = function (path) {
         await newReport(ctx);
     }
 
-
     /**
      * Applying routes
      */
-    router.post('/reports', koaBody(), reportFromToken, clearToken, newReport)
+    router.post('/reports', koaBody(), reportFromId, newReport)
         .get('/reports', needsFilename, downloadReport)
-        .post('/reports/:id/stop', koaBody(), reportFromIdAndToken, clearToken, stopReport)
-        .post('/reports/:id/destroy', koaBody(), reportFromIdAndToken, clearToken, deleteReport)
+        .post('/reports/stop', koaBody(), reportFromId, stopReport)
+        .post('/reports/destroy', koaBody(), reportFromId, deleteReport)
         .get('/.well-known/acme-challenge/:file', acme_challenge)
-        .post('/reports/:id/restart', koaBody(), reportFromIdAndToken, clearToken, isErrored, restartReport)
+        .post('/reports/restart', koaBody(), reportFromId, isErrored, restartReport)
         .get('/tls', async ctx => {
-            const context = JSON.stringify(ctx, undefined, 4);
-            console.log(context);
-
-            ctx.body = context;
+            ctx.body = "LOOOL";
         });
 
     return router;

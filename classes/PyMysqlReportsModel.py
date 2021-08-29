@@ -51,6 +51,7 @@ class PyMysqlReportsModel(ReportsModelInterface):
         cursor.execute(query, data)
         cursor.close()
 
+    # This is useless now, token has been replaced by mTLS
     def set_notification_token(self, id: int) -> str:
         self.__con.ping(reconnect=True)
         cursor = self.__con.cursor()

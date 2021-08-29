@@ -61,9 +61,6 @@ const Report = sequelize.define('Report', {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        token: {
-            type: DataTypes.STRING
-        },
         pid: {
             type: DataTypes.INTEGER,
             defaultValue: 0
@@ -79,10 +76,6 @@ const Report = sequelize.define('Report', {
             {
                 name: 'pending_index',
                 fields: ['errored', 'completed']
-            },
-            {
-                name: 'token_index',
-                fields: ['token']
             }
         ]
     });
