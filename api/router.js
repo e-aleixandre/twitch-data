@@ -180,10 +180,7 @@ module.exports = function (path) {
         .post('/reports/stop', koaBody(), reportFromId, stopReport)
         .post('/reports/destroy', koaBody(), reportFromId, deleteReport)
         .get('/.well-known/acme-challenge/:file', acme_challenge)
-        .post('/reports/restart', koaBody(), reportFromId, isErrored, restartReport)
-        .get('/tls', async ctx => {
-            ctx.body = "LOOOL";
-        });
+        .post('/reports/restart', koaBody(), reportFromId, isErrored, restartReport);
 
     return router;
 }
